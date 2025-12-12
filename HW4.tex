@@ -1,0 +1,749 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  landscapepaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+\usepackage{xcolor}
+\usepackage[margin= 0.5in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Prioritizing-potential-aquaculture},
+  pdfauthor={Ixel},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Prioritizing-potential-aquaculture}
+\author{Ixel}
+\date{2025-12-31}
+\begin{document}
+\maketitle
+
+\renewcommand*\contentsname{Table of contents}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+
+\pandocbounded{\includegraphics[keepaspectratio]{fREADME1.png.png}}
+\pandocbounded{\includegraphics[keepaspectratio]{fREADME1.2.png.png}}
+
+What Exclusive Economic Zones (eez) on the west Coast of the US are best
+suited to developing marine aquaculture for several species of oysters
+and California datemussel.
+
+\section{Set-Up}\label{set-up}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load in Libraries}
+\FunctionTok{library}\NormalTok{(here)}
+\FunctionTok{library}\NormalTok{(testthat)}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(sf)}
+\FunctionTok{library}\NormalTok{(kableExtra)}
+\FunctionTok{library}\NormalTok{(sp)}
+\FunctionTok{library}\NormalTok{(stars) }
+\FunctionTok{library}\NormalTok{(tmap)}
+\FunctionTok{library}\NormalTok{(terra)}
+\FunctionTok{library}\NormalTok{(viridisLite)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Prepare Data}
+
+\CommentTok{\# Bathymetry}
+\NormalTok{depth }\OtherTok{\textless{}{-}} \FunctionTok{read\_stars}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"data/depth.tif"}\NormalTok{))}
+
+\CommentTok{\# Exclusive Economic Zones (eez)}
+\NormalTok{eez }\OtherTok{\textless{}{-}} \FunctionTok{st\_read}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"data/wc\_regions\_clean.shp"}\NormalTok{))}
+
+\CommentTok{\# Sea Surface Temperature (SST) load as a list of .tiff files }
+\NormalTok{sst }\OtherTok{\textless{}{-}} \FunctionTok{list.files}\NormalTok{(}\AttributeTok{path=} \StringTok{"data"}\NormalTok{,}
+                  \AttributeTok{pattern=} \StringTok{"average\_annual"}\NormalTok{, }\CommentTok{\# file name matching pattern}
+                   \AttributeTok{full.names =} \ConstantTok{TRUE}\NormalTok{) }\CommentTok{\# Reference entire file name matching this pattern}
+
+\CommentTok{\# Stack all rasters files in folder using rast()}
+\NormalTok{sst }\OtherTok{\textless{}{-}} \FunctionTok{rast}\NormalTok{(sst)}
+\FunctionTok{names}\NormalTok{(sst) }\CommentTok{\#checking list}
+\end{Highlighting}
+\end{Shaded}
+
+Check that the datasets have the same coordinate reference system
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Check and align CRS for multiple datasets}
+\ControlFlowTok{if}\NormalTok{ (}\FunctionTok{st\_crs}\NormalTok{(depth) }\SpecialCharTok{==} \FunctionTok{st\_crs}\NormalTok{(eez)) \{}
+  \FunctionTok{print}\NormalTok{(}\StringTok{"Coordinate reference system match!"}\NormalTok{)}
+  
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{\{}
+  \FunctionTok{warning}\NormalTok{(}\StringTok{"CRS mismatch between depth and eez"}\NormalTok{)}
+  \CommentTok{\# tranfgotm data to match}
+\NormalTok{  depth }\OtherTok{\textless{}{-}} \FunctionTok{st\_transform}\NormalTok{(depth, }\FunctionTok{st\_crs}\NormalTok{(eez))}
+
+\NormalTok{  \}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Coordinate reference system match!"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (}\FunctionTok{st\_crs}\NormalTok{(eez)}\SpecialCharTok{$}\NormalTok{wkt }\SpecialCharTok{!=} \FunctionTok{crs}\NormalTok{(sst)) \{}
+  \FunctionTok{warning}\NormalTok{(}\StringTok{"CRS mismatch between eez and sst"}\NormalTok{)}
+\NormalTok{  sst }\OtherTok{\textless{}{-}} \FunctionTok{project}\NormalTok{(sst, }\FunctionTok{st\_crs}\NormalTok{(eez)}\SpecialCharTok{$}\NormalTok{wkt)  }
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: CRS mismatch between eez and sst
+\end{verbatim}
+
+\section{Process data}\label{process-data}
+
+\begin{itemize}
+\tightlist
+\item
+  Find the mean SST from 2008-2012 (e.g.~create single raster of average
+  SST)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    convert average SST from Kelvin to Celsius hint: subtract by 273.15
+  \end{itemize}
+\item
+  crop depth raster to match the extent of the SST raster note:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    the resolutions of the SST and depth data do not match resample the
+    depth data to match the resolution of the SST data using the nearest
+    neighbor approach
+  \item
+    check that the depth and SST match in resolution, extent, and
+    coordinate reference system
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate the SST average }
+\NormalTok{mean\_sst }\OtherTok{\textless{}{-}} \FunctionTok{app}\NormalTok{(sst[[}\FunctionTok{c}\NormalTok{(}\StringTok{"average\_annual\_sst\_2008"}\NormalTok{,}
+                       \StringTok{"average\_annual\_sst\_2009"}\NormalTok{, }
+                       \StringTok{"average\_annual\_sst\_2010"}\NormalTok{,}
+                       \StringTok{"average\_annual\_sst\_2011"}\NormalTok{, }
+                       \StringTok{"average\_annual\_sst\_2012"}\NormalTok{)]], }
+                \AttributeTok{fun =}\NormalTok{ mean, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Convert average SST from Kelvin to Celsius}
+\NormalTok{sst\_mean\_celsius }\OtherTok{\textless{}{-}}\NormalTok{ mean\_sst }\SpecialCharTok{{-}} \FloatTok{273.15}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# First convert depth stars to SpatRaster}
+\NormalTok{depth\_rast }\OtherTok{\textless{}{-}} \FunctionTok{rast}\NormalTok{(depth)}
+\CommentTok{\# crop depth to match SST  extent}
+\NormalTok{depth\_crop }\OtherTok{\textless{}{-}} \FunctionTok{crop}\NormalTok{(depth\_rast, sst\_mean\_celsius)}
+
+\CommentTok{\# Resample depth\_crop to match SST resolution, use method near}
+\NormalTok{depth\_resample }\OtherTok{\textless{}{-}} \FunctionTok{resample}\NormalTok{(depth\_crop,}
+\NormalTok{                           sst\_mean\_celsius, }
+                           \AttributeTok{method =} \StringTok{"near"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Check resolution match }
+\ControlFlowTok{if}\NormalTok{ (}\FunctionTok{all}\NormalTok{(}\FunctionTok{dim}\NormalTok{(depth\_resample) }\SpecialCharTok{==} \FunctionTok{dim}\NormalTok{(sst\_mean\_celsius)) }\SpecialCharTok{\&\&}
+    \FunctionTok{isTRUE}\NormalTok{(}\FunctionTok{all.equal}\NormalTok{(}\FunctionTok{res}\NormalTok{(depth\_resample), }\FunctionTok{res}\NormalTok{(sst\_mean\_celsius))) }\SpecialCharTok{\&\&}
+    \FunctionTok{crs}\NormalTok{(depth\_resample) }\SpecialCharTok{==} \FunctionTok{crs}\NormalTok{(sst\_mean\_celsius) }\SpecialCharTok{\&\&}
+    \FunctionTok{ext}\NormalTok{(depth\_resample) }\SpecialCharTok{==} \FunctionTok{ext}\NormalTok{(sst\_mean\_celsius)) \{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"✓ All raster properties match!}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"✗ Some properties do not match}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✗ Some properties do not match
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Match depth and SST CRS\textquotesingle{}s}
+\FunctionTok{crs}\NormalTok{(depth\_resample) }\OtherTok{\textless{}{-}} \FunctionTok{crs}\NormalTok{(sst\_mean\_celsius)}
+
+\CommentTok{\# Stack}
+\NormalTok{ocean\_stack }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(sst\_mean\_celsius, depth\_resample)}
+\FunctionTok{names}\NormalTok{(ocean\_stack) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"sst"}\NormalTok{, }\StringTok{"depth"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"✓ Successfully stacked!}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+✓ Successfully stacked!
+\end{verbatim}
+
+\section{Find suitable locations for
+Oysters}\label{find-suitable-locations-for-oysters}
+
+To find suitable locations for marine aquaculture, we'll need to find
+locations that are suitable in terms of both SST and depth.
+\textbf{Oyster} research has show that oysters need the following
+conditions for optimal growth: - Sea surface Reclassify SST and depth
+data into locations that are suitable for oysters hint: set suitable
+values to 1 and unsuitable values to 0 find locations that satisfy both
+SST and depth conditions
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Reclassify SST (11{-}30°C suitable for oysters)}
+\NormalTok{sst\_suitable }\OtherTok{\textless{}{-}} \FunctionTok{app}\NormalTok{(sst\_mean\_celsius, }\AttributeTok{fun =} \ControlFlowTok{function}\NormalTok{(x)\{}
+  \FunctionTok{ifelse}\NormalTok{(x }\SpecialCharTok{\textgreater{}=} \DecValTok{11} \SpecialCharTok{\&}\NormalTok{ x }\SpecialCharTok{\textless{}=} \DecValTok{30}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{) }\CommentTok{\# if temperate is between 11{-} 30 °C, return 1, else 0}
+\NormalTok{\})}
+
+\CommentTok{\# Reclassify Suitable depth range (0{-}70 meters for oysters)}
+\NormalTok{depth\_suitable }\OtherTok{\textless{}{-}} \FunctionTok{app}\NormalTok{(depth\_resample, }\AttributeTok{fun =} \ControlFlowTok{function}\NormalTok{(x)\{}
+  \FunctionTok{ifelse}\NormalTok{(x }\SpecialCharTok{\textgreater{}=} \SpecialCharTok{{-}}\DecValTok{70} \SpecialCharTok{\&}\NormalTok{ x }\SpecialCharTok{\textless{}=} \DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{) }\CommentTok{\# select depths from 0 to 70 meters below surface.}
+\NormalTok{\})}
+
+\CommentTok{\# Suitable locations for both conditions}
+\CommentTok{\#Use lapp() to multiply the two suitability raster}
+
+\NormalTok{suitable\_locations }\OtherTok{\textless{}{-}} \FunctionTok{lapp}\NormalTok{(}\FunctionTok{c}\NormalTok{(sst\_suitable, depth\_suitable), }
+                          \AttributeTok{fun =} \ControlFlowTok{function}\NormalTok{(sst, depth) \{}
+\NormalTok{                             sst }\SpecialCharTok{*}\NormalTok{ depth}
+\NormalTok{                           \})}
+
+\CommentTok{\#suitable\_locations \textless{}{-} sst\_suitable * depth\_suitable}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Determine the most suitable
+EEZ}\label{determine-the-most-suitable-eez}
+
+We want to determine the total suitable area within each EEZ in order to
+rank zones by priority. To do so, we need to find the total area of
+suitable locations within each EEZ.
+
+Select suitable cells within West Coast EEZ's find area of grid cells
+find the total suitable area within each EEZ hint: it might be helpful
+to rasterize the EEZ data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Rasterize the EEZ data (creates zone IDs)}
+\NormalTok{eez\_raster }\OtherTok{\textless{}{-}} \FunctionTok{rasterize}\NormalTok{(eez, suitable\_locations, }\AttributeTok{field =} \StringTok{"rgn"}\NormalTok{)}
+
+\CommentTok{\# Mask suitable locations to EEZ boundaries}
+\NormalTok{suitable\_eez }\OtherTok{\textless{}{-}} \FunctionTok{mask}\NormalTok{(suitable\_locations, eez) }\CommentTok{\# keep only raster cells that fall within the EEZ polygons}
+
+\CommentTok{\#Calculate cell area with cellSize()}
+\NormalTok{cell\_area\_km2 }\OtherTok{\textless{}{-}} \FunctionTok{cellSize}\NormalTok{(suitable\_locations, }\AttributeTok{unit =} \StringTok{"km"}\NormalTok{) }\CommentTok{\# calculate actual area of each raster cell}
+
+\CommentTok{\# Calculate suitable area per cell}
+\NormalTok{suitable\_area }\OtherTok{\textless{}{-}}\NormalTok{ suitable\_eez }\SpecialCharTok{*}\NormalTok{ cell\_area\_km2}
+
+\CommentTok{\# Sum suitable are by EEZ zonal statistics }
+\NormalTok{eez\_suitable\_area }\OtherTok{\textless{}{-}} \FunctionTok{zonal}\NormalTok{(suitable\_area, eez\_raster, }\AttributeTok{fun =} \StringTok{"sum"}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{colnames}\NormalTok{(eez\_suitable\_area) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"eez\_id"}\NormalTok{, }\StringTok{"suitable\_area\_km2"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# join with eez data}
+\NormalTok{eez}\SpecialCharTok{$}\NormalTok{suitable\_area\_km2 }\OtherTok{\textless{}{-}}\NormalTok{ eez\_suitable\_area}\SpecialCharTok{$}\NormalTok{suitable\_area\_km2[}\FunctionTok{match}\NormalTok{(eez}\SpecialCharTok{$}\NormalTok{rgn, eez\_suitable\_area}\SpecialCharTok{$}\NormalTok{eez\_id)]}
+
+\CommentTok{\# Rank EEZ data}
+\NormalTok{eez\_ranked }\OtherTok{\textless{}{-}}\NormalTok{ eez[}\FunctionTok{order}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{eez}\SpecialCharTok{$}\NormalTok{suitable\_area\_km2), ]}
+
+\NormalTok{summary\_table }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Rank =} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(eez\_ranked),}
+  \AttributeTok{EEZ\_Name =}\NormalTok{ eez\_ranked}\SpecialCharTok{$}\NormalTok{rgn\_key,}
+  \AttributeTok{Suitable\_Area\_km2 =} \FunctionTok{round}\NormalTok{(eez\_ranked}\SpecialCharTok{$}\NormalTok{suitable\_area\_km2, }\DecValTok{2}\NormalTok{),}
+  \AttributeTok{Percent\_of\_Total =} \FunctionTok{round}\NormalTok{(}\DecValTok{100} \SpecialCharTok{*}\NormalTok{ eez\_ranked}\SpecialCharTok{$}\NormalTok{suitable\_area\_km2 }\SpecialCharTok{/} 
+                           \FunctionTok{sum}\NormalTok{(eez\_ranked}\SpecialCharTok{$}\NormalTok{suitable\_area\_km2), }\DecValTok{1}\NormalTok{)}
+\NormalTok{)}
+
+
+\NormalTok{eez\_table }\OtherTok{\textless{}{-}} \FunctionTok{kable}\NormalTok{(summary\_table,}
+      \AttributeTok{caption =} \StringTok{"EEZ Rankings by Suitable Aquaculture Area"}\NormalTok{,}
+      \AttributeTok{col.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"Rank"}\NormalTok{, }\StringTok{"EEZ Region"}\NormalTok{, }\StringTok{"Suitable Area (km²)"}\NormalTok{, }\StringTok{"\% of Total"}\NormalTok{),}
+      \AttributeTok{align =} \FunctionTok{c}\NormalTok{(}\StringTok{"c"}\NormalTok{, }\StringTok{"l"}\NormalTok{, }\StringTok{"r"}\NormalTok{, }\StringTok{"r"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{bootstrap\_options =} \FunctionTok{c}\NormalTok{(}\StringTok{"striped"}\NormalTok{, }\StringTok{"hold\_position"}\NormalTok{),}
+                \AttributeTok{full\_width =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{row\_spec}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{bold =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{background =} \StringTok{"\#4CAF50"}\NormalTok{, }\AttributeTok{color =} \StringTok{"white"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{row\_spec}\NormalTok{(}\DecValTok{1}\NormalTok{, }\AttributeTok{bold =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{background =} \StringTok{"\#E8F5E9"}\NormalTok{)  }\CommentTok{\# Highlight top rank}
+
+\NormalTok{eez\_table}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[t]{clrr}
+\caption{\label{tab:unnamed-chunk-9}EEZ Rankings by Suitable Aquaculture Area}\\
+\toprule
+\cellcolor[HTML]{4CAF50}{\textcolor{white}{\textbf{Rank}}} & \cellcolor[HTML]{4CAF50}{\textcolor{white}{\textbf{EEZ Region}}} & \cellcolor[HTML]{4CAF50}{\textcolor{white}{\textbf{Suitable Area (km²)}}} & \cellcolor[HTML]{4CAF50}{\textcolor{white}{\textbf{\% of Total}}}\\
+\midrule
+\cellcolor[HTML]{E8F5E9}{\textbf{1}} & \cellcolor[HTML]{E8F5E9}{\textbf{CA-C}} & \cellcolor[HTML]{E8F5E9}{\textbf{4940.04}} & \cellcolor[HTML]{E8F5E9}{\textbf{34.1}}\\
+2 & CA-S & 4221.39 & 29.1\\
+3 & WA & 3313.16 & 22.8\\
+4 & OR & 1578.97 & 10.9\\
+5 & CA-N & 454.30 & 3.1\\
+\bottomrule
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Map with tmap basic}
+\FunctionTok{tm\_basemap}\NormalTok{(}\StringTok{"Esri.OceanBasemap"}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.7}\NormalTok{) }\SpecialCharTok{+}
+\FunctionTok{tm\_shape}\NormalTok{(eez\_ranked) }\SpecialCharTok{+}
+  \FunctionTok{tm\_polygons}\NormalTok{(}\StringTok{"suitable\_area\_km2"}\NormalTok{,}
+              \AttributeTok{palette =} \StringTok{"{-}mako"}\NormalTok{,}
+               \AttributeTok{style =} \StringTok{"cont"}\NormalTok{,}
+              \AttributeTok{title =} \StringTok{"Suitable Area (km²)"}\NormalTok{,}
+              \AttributeTok{border.col =} \StringTok{"black"}\NormalTok{,}
+              \AttributeTok{border.lwd =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{tm\_layout}\NormalTok{(}\AttributeTok{main.title =} \StringTok{"Suitable Oyster Aquaculuture Area by EEZ"}\NormalTok{,}
+            \AttributeTok{main.title.size =} \FloatTok{1.2}\NormalTok{,}
+            \AttributeTok{legend.outsides =} \ConstantTok{TRUE}\NormalTok{,}
+            \AttributeTok{frame =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+} 
+    \FunctionTok{tm\_text}\NormalTok{(}\StringTok{"rgn"}\NormalTok{, }\CommentTok{\# Label by region}
+          \AttributeTok{size =}\NormalTok{ .}\DecValTok{8}\NormalTok{, }\CommentTok{\# Adjust size}
+          \AttributeTok{col =} \StringTok{"white"}\NormalTok{, }\CommentTok{\# Adjust text color}
+          \AttributeTok{fontface =} \StringTok{"bold"}\NormalTok{, }\CommentTok{\# Labels are bolded}
+          \AttributeTok{xmod =} \SpecialCharTok{{-}}\NormalTok{.}\DecValTok{5}\NormalTok{) }\SpecialCharTok{+} \CommentTok{\# Adjust .5 from the left}
+  \FunctionTok{tm\_compass}\NormalTok{(}\AttributeTok{type =} \StringTok{"4star"}\NormalTok{, }\AttributeTok{position =} \FunctionTok{c}\NormalTok{(}\StringTok{"right"}\NormalTok{, }\StringTok{"top"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{tm\_scalebar}\NormalTok{(}\AttributeTok{position =} \FunctionTok{c}\NormalTok{(}\StringTok{"left"}\NormalTok{, }\StringTok{"bottom"}\NormalTok{)) }
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{HW4_files/figure-pdf/unnamed-chunk-10-1.pdf}}
+
+\section{Workflow for other species using a
+function}\label{workflow-for-other-species-using-a-function}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{find\_suitable\_aquaculture }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(sst\_raster, }
+\NormalTok{                                      depth\_raster, }
+\NormalTok{                                      eez\_sf, }
+\NormalTok{                                      sst\_min, }
+\NormalTok{                                      sst\_max, }
+\NormalTok{                                      depth\_min, }
+\NormalTok{                                      depth\_max,}
+\NormalTok{                                      species\_name) \{}
+  
+\CommentTok{\# Reclassify SST}
+\NormalTok{sst\_suitable }\OtherTok{\textless{}{-}} \FunctionTok{app}\NormalTok{(sst\_raster, }\AttributeTok{fun =} \ControlFlowTok{function}\NormalTok{(x) \{}
+    \FunctionTok{ifelse}\NormalTok{(x }\SpecialCharTok{\textgreater{}=}\NormalTok{ sst\_min }\SpecialCharTok{\&}\NormalTok{ x }\SpecialCharTok{\textless{}=}\NormalTok{ sst\_max, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{  \})}
+  
+\CommentTok{\# Reclassify depth}
+\NormalTok{depth\_suitable }\OtherTok{\textless{}{-}} \FunctionTok{app}\NormalTok{(depth\_raster, }\AttributeTok{fun =} \ControlFlowTok{function}\NormalTok{(x) \{}
+    \FunctionTok{ifelse}\NormalTok{(x }\SpecialCharTok{\textgreater{}=}\NormalTok{ depth\_min }\SpecialCharTok{\&}\NormalTok{ x }\SpecialCharTok{\textless{}=}\NormalTok{ depth\_max, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{  \})}
+  
+\CommentTok{\# Find suitable locations (both conditions)}
+\NormalTok{suitable\_locations }\OtherTok{\textless{}{-}}\NormalTok{ sst\_suitable }\SpecialCharTok{*}\NormalTok{ depth\_suitable}
+\FunctionTok{names}\NormalTok{(suitable\_locations) }\OtherTok{\textless{}{-}}\NormalTok{ species\_name }
+
+\CommentTok{\# Mask to EEZ}
+\NormalTok{suitable\_in\_eez }\OtherTok{\textless{}{-}} \FunctionTok{mask}\NormalTok{(suitable\_locations, eez\_sf)}
+  
+\CommentTok{\# Rasterize EEZ}
+\NormalTok{eez\_rasterize }\OtherTok{\textless{}{-}} \FunctionTok{rasterize}\NormalTok{(eez\_sf, suitable\_locations, }\AttributeTok{field =} \StringTok{"rgn"}\NormalTok{)}
+  
+\CommentTok{\# Calculate cell areas}
+\NormalTok{cell\_area\_km2 }\OtherTok{\textless{}{-}} \FunctionTok{cellSize}\NormalTok{(suitable\_locations, }\AttributeTok{unit =} \StringTok{"km"}\NormalTok{)}
+ 
+
+\CommentTok{\# Calculate suitable area per cell (commented out for now)}
+\NormalTok{suitable\_area }\OtherTok{\textless{}{-}}\NormalTok{ suitable\_in\_eez }\SpecialCharTok{*}\NormalTok{ cell\_area\_km2}
+  
+
+\CommentTok{\# Sum by EEZ zone}
+\NormalTok{eez\_suitable\_area }\OtherTok{\textless{}{-}} \FunctionTok{zonal}\NormalTok{(}
+\NormalTok{  suitable\_area, }
+\NormalTok{  eez\_rasterize, }
+  \AttributeTok{fun =} \StringTok{"sum"}\NormalTok{, }
+  \AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+
+\FunctionTok{colnames}\NormalTok{(eez\_suitable\_area) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"EEZ\_ID"}\NormalTok{, }\StringTok{"Suitable\_Area\_km2"}\NormalTok{)}
+  
+\CommentTok{\# Join with EEZ data and rank}
+\NormalTok{eez\_sf}\SpecialCharTok{$}\NormalTok{suitable\_area\_km2 }\OtherTok{\textless{}{-}}
+\NormalTok{  eez\_suitable\_area}\SpecialCharTok{$}\NormalTok{Suitable\_Area\_km2[}
+    \FunctionTok{match}\NormalTok{(eez\_sf}\SpecialCharTok{$}\NormalTok{rgn, eez\_suitable\_area}\SpecialCharTok{$}\NormalTok{EEZ\_ID)]}
+\NormalTok{  eez\_ranked }\OtherTok{\textless{}{-}}\NormalTok{ eez\_sf[}\FunctionTok{order}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{eez\_sf}\SpecialCharTok{$}\NormalTok{suitable\_area\_km2), ]}
+  
+\CommentTok{\# Create summary table}
+\NormalTok{summary\_table }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+   \AttributeTok{Rank =} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(eez\_ranked),}
+    \AttributeTok{EEZ =}\NormalTok{ eez\_ranked}\SpecialCharTok{$}\NormalTok{rgn\_key,}
+    \AttributeTok{Suitable\_Area\_km2 =} \FunctionTok{round}\NormalTok{(eez\_ranked}\SpecialCharTok{$}\NormalTok{suitable\_area\_km2, }\DecValTok{2}\NormalTok{)}
+\NormalTok{  )}
+  
+\CommentTok{\# Return results as a list}
+\NormalTok{results }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
+   \AttributeTok{species =}\NormalTok{ species\_name,}
+  \AttributeTok{sst\_suitable =}\NormalTok{ sst\_suitable,}
+   \AttributeTok{depth\_suitable =}\NormalTok{ depth\_suitable,}
+   \AttributeTok{suitable\_locations =}\NormalTok{ suitable\_locations,}
+   \AttributeTok{suitable\_in\_eez =}\NormalTok{ suitable\_in\_eez,}
+   \AttributeTok{eez\_ranked =}\NormalTok{ eez\_ranked,}
+    \AttributeTok{summary\_table =}\NormalTok{ summary\_table}
+\NormalTok{  )}
+  
+ \FunctionTok{return}\NormalTok{(results)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Apply function to species of
+choice}\label{apply-function-to-species-of-choice}
+
+\subsection{Adula californiensis (Philippi,
+1847)}\label{adula-californiensis-philippi-1847}
+
+\begin{itemize}
+\tightlist
+\item
+  Common Name: California datemussel
+\item
+  Low Fishing Vulnerability
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Depth range: 0-20 meters
+  \item
+    Temperature: 9.1-18.6 C
+  \end{itemize}
+\item
+  Source: SeaLifeBase
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Mussels (different requirements)}
+\NormalTok{mussel\_results }\OtherTok{\textless{}{-}} \FunctionTok{find\_suitable\_aquaculture}\NormalTok{(}
+  \AttributeTok{sst\_raster =}\NormalTok{ sst\_mean\_celsius,}
+  \AttributeTok{depth\_raster =}\NormalTok{ depth\_resample,}
+  \AttributeTok{eez\_sf =}\NormalTok{ eez,}
+  \AttributeTok{sst\_min =} \FloatTok{9.1}\NormalTok{,}
+  \AttributeTok{sst\_max =} \FloatTok{18.6}\NormalTok{,}
+  \AttributeTok{depth\_min =} \DecValTok{0}\NormalTok{,}
+  \AttributeTok{depth\_max =} \DecValTok{20}\NormalTok{,}
+  \AttributeTok{species\_name =} \StringTok{"California Datemussel"}
+\NormalTok{)}
+
+\CommentTok{\# Access results}
+\FunctionTok{kable}\NormalTok{(mussel\_results}\SpecialCharTok{$}\NormalTok{summary\_table)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}rlr@{}}
+\toprule\noalign{}
+Rank & EEZ & Suitable\_Area\_km2 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & WA & 260.91 \\
+2 & CA-S & 124.68 \\
+3 & CA-C & 103.50 \\
+4 & OR & 76.65 \\
+5 & CA-N & 33.36 \\
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Plot Mussel EEZ}
+\CommentTok{\#| fig.width: 15}
+\CommentTok{\#| fig.height: 8}
+
+\FunctionTok{tm\_basemap}\NormalTok{(}\StringTok{"Esri.OceanBasemap"}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.7}\NormalTok{) }\SpecialCharTok{+}
+\CommentTok{\#tm\_shape(mussel\_results$suitable\_in\_eez) +}
+  \FunctionTok{tm\_raster}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{tm\_shape}\NormalTok{(mussel\_results}\SpecialCharTok{$}\NormalTok{eez\_ranked) }\SpecialCharTok{+}
+  \FunctionTok{tm\_polygons}\NormalTok{(}\StringTok{"suitable\_area\_km2"}\NormalTok{,}
+              \AttributeTok{palette =} \StringTok{"{-}mako"}\NormalTok{,}
+              \AttributeTok{style =} \StringTok{"cont"}\NormalTok{,}
+              \AttributeTok{title =} \StringTok{"Suitable Area (km²)"}\NormalTok{, }\AttributeTok{boarder.col =} \StringTok{"black"}\NormalTok{,}
+              \AttributeTok{border.lwd =} \FloatTok{0.5}\NormalTok{,}
+\NormalTok{              ) }\SpecialCharTok{+}
+  \FunctionTok{tm\_layout}\NormalTok{(}\AttributeTok{main.title =}\StringTok{"Suitable Mussel Aquaculuture Area by EEZ"}\NormalTok{,}
+            \AttributeTok{main.title.size =}\FloatTok{1.2}\NormalTok{,}\AttributeTok{legend.outsides =}\ConstantTok{TRUE}\NormalTok{,}\AttributeTok{frame =}\ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{tm\_text}\NormalTok{(}\StringTok{"rgn"}\NormalTok{, }\CommentTok{\# Label by region}
+          \AttributeTok{size =}\NormalTok{ .}\DecValTok{8}\NormalTok{, }\CommentTok{\# Adjust size}
+          \AttributeTok{col =} \StringTok{"white"}\NormalTok{, }\CommentTok{\# Adjust text color}
+          \AttributeTok{fontface =} \StringTok{"bold"}\NormalTok{, }\CommentTok{\# Labels are bolded}
+          \AttributeTok{xmod =} \SpecialCharTok{{-}}\NormalTok{.}\DecValTok{5}\NormalTok{) }\SpecialCharTok{+} \CommentTok{\# Adjust .5 from the left}
+  \FunctionTok{tm\_compass}\NormalTok{(}\AttributeTok{type =} \StringTok{"4star"}\NormalTok{, }
+           \AttributeTok{position =} \FunctionTok{c}\NormalTok{(}\StringTok{"right"}\NormalTok{, }\StringTok{"top"}\NormalTok{),}
+           \AttributeTok{size =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
+\FunctionTok{tm\_scale\_bar}\NormalTok{(}\AttributeTok{position =} \FunctionTok{c}\NormalTok{(}\StringTok{"left"}\NormalTok{, }\StringTok{"bottom"}\NormalTok{),}
+             \AttributeTok{text.size =} \FloatTok{0.7}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{HW4_files/figure-pdf/unnamed-chunk-13-1.pdf}}
+
+\section{Reflections}\label{reflections}
+
+Reflections must be clear, accurate, and demonstrate a deep
+understanding of the analysis performed
+
+This analysis identified suitable locations for oyster aquaculture along
+the West Coast EEZs by integrating sea surface temperature (SST) and
+bathymetric data. The workflow demonstrated how geospatial analysis can
+support marine resource management decisions by combining environmental
+constraints with jurisdictional boundaries. In the analysis we found
+that 2.3\% (based on cellsize) of the West Coast EEZ area meets the
+suitability criteria for oyster cultivation (11-30°C SST, 0-70m depth).
+CA-C (Central California) ranked highest with 4940.04 km² of suitable
+area, suggesting it as the priority zone for aquaculture development.
+
+\section{Cite}\label{cite}
+
+Hall, S. J., Delaporte, A., Phillips, M. J., Beveridge, M. \& O'Keefe,
+M. Blue Frontiers: Managing the Environmental Costs of Aquaculture (The
+WorldFish Center, Penang, Malaysia, 2011).
+
+Gentry, R. R., Froehlich, H. E., Grimm, D., Kareiva, P., Parke, M.,
+Rust, M., Gaines, S. D., \& Halpern, B. S. Mapping the global potential
+for marine aquaculture. Nature Ecology \& Evolution, 1, 1317-1324
+(2017).︎
+
+GEBCO Compilation Group (2022) GEBCO\_2022 Grid
+(doi:10.5285/e0f0bb80-ab44-2739-e053-6c86abc0289c)
+
+Commercially Important Species Occurring in United States (contiguous
+states). (2025). Sealifebase.ca.
+https://www.sealifebase.ca/country/CountryChecklist.php?c\_code=840\&vhabitat=commercial
+
+Oliver, R. (2025, November 25). Homework Assignment 4. Github.io.
+https://eds-223-geospatial.github.io/assignments/HW4.html
+
+
+
+
+\end{document}

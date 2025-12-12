@@ -228,6 +228,7 @@ tm_basemap("Esri.OceanBasemap", alpha = 0.7) +
 tm_shape(eez_ranked) +
   tm_polygons("suitable_area_km2",
               palette = "-mako",
+               style = "cont",
               title = "Suitable Area (km²)",
               border.col = "black",
               border.lwd = 0.5) +
@@ -363,8 +364,10 @@ tm_basemap("Esri.OceanBasemap", alpha = 0.7) +
   tm_shape(mussel_results$eez_ranked) +
   tm_polygons("suitable_area_km2",
               palette = "-mako",
+              style = "cont",
               title = "Suitable Area (km²)", boarder.col = "black",
-              border.lwd = 0.5) +
+              border.lwd = 0.5,
+              ) +
   tm_layout(main.title ="Suitable Mussel Aquaculuture Area by EEZ",
             main.title.size =1.2,legend.outsides =TRUE,frame =FALSE) +
   tm_text("rgn", # Label by region
