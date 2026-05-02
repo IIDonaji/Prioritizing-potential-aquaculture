@@ -1,4 +1,4 @@
-# Prioritizing Potential Aquaculture on Western Coast US
+# Identifying Priority EEZ Regions for Oyster and Lingcod Aquaculture Using SST and Bathymetric Data
 
 <img src="https://images.unsplash.com/photo-1519122295308-bdb40916b529?q=80&amp;w=3174&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="marine aquaculture" width="800"/>
 
@@ -19,6 +19,15 @@ In this repository you will fine a geospataila analysis identifying optimal loca
 ### **Repository Structure**
 
 ```         
+.gitignore
+LICENSE
+Prioritizing-potential-aquaculture.Rproj
+README.html
+README.md
+aquaculture_analysis.qmd
+figs/README1.2.png
+figs/README1.png
+images/clipboard-108025981.png
 
 ```
 
