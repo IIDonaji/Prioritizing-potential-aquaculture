@@ -1,6 +1,6 @@
 # Ignore the 'data' directory
 data/
-
+HW4_Medrano.pdf
 # History files
 .Rhistory
 .Rapp.history
@@ -50,3 +50,4 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+.positai

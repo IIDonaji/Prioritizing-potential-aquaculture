@@ -1,0 +1,434 @@
+---
+title: "Prioritizing-potential-aquaculture"
+author: "Ixel"
+date: "11/31/2025"
+format: 
+  pdf:
+    fig-pos: "H"
+    geometry: margin= 0.5in
+    code-fold: false
+    toc: true
+    number-sections: true
+execute:
+  warning: false
+  message: false
+editor_options: 
+  chunk_output_type: console
+editor: visual
+---
+
+What Exclusive Economic Zones (eez) on the west Coast of the US are best suited to developing marine aquaculture for several species of oysters and California datemussel.
+
+# Set-Up
+
+```{r, message=FALSE}
+#| output: false
+
+# Load in Libraries
+library(here)
+library(testthat)
+library(tidyverse)
+library(sf)
+library(kableExtra)
+library(sp)
+library(stars) 
+library(tmap)
+library(terra)
+library(viridisLite)
+```
+
+```{r,message = FALSE}
+#| output: false
+# Prepare Data
+
+# Bathymetry
+depth <- read_stars(here("data/depth.tif"))
+
+# Exclusive Economic Zones (eez)
+eez <- st_read(here("data/wc_regions_clean.shp"))
+
+# Sea Surface Temperature (SST) load as a list of .tiff files 
+sst <- list.files(path= "data",
+                  pattern= "average_annual", # file name matching pattern
+                   full.names = TRUE) # Reference entire file name matching this pattern
+
+# Stack all rasters files in folder using rast()
+sst <- rast(sst)
+names(sst) #checking list
+```
+
+Check that the datasets have the same coordinate reference system
+
+```{r, message=FALSE}
+
+# Check and align CRS for multiple datasets
+if (st_crs(depth) == st_crs(eez)) {
+  print("Coordinate reference system match!")
+  
+} else{
+  warning("CRS mismatch between depth and eez")
+  # tranfgotm data to match
+  depth <- st_transform(depth, st_crs(eez))
+
+  }
+   
+
+if (st_crs(eez)$wkt != crs(sst)) {
+  warning("CRS mismatch between eez and sst")
+  sst <- project(sst, st_crs(eez)$wkt)  
+}
+```
+
+
+
+```{r}
+  
+# Calculate the SST average 
+mean_sst <- app(sst[[c("average_annual_sst_2008",
+                         "average_annual_sst_2009", 
+                         "average_annual_sst_2010",
+                         "average_annual_sst_2011", 
+                         "average_annual_sst_2012")]], 
+                  fun = mean, na.rm = TRUE)
+
+# Convert average SST from Kelvin to Celsius
+sst_mean_celsius <- mean_sst - 273.15
+  
+```
+
+# Process Data
+
+To prepare the data for suitability analysis, SST and depth rasters 
+must match in resolution, extent, and coordinate reference system. 
+The five annual SST rasters (2008–2012) were averaged into a single 
+mean raster using `app()` and converted from Kelvin to Celsius. The 
+bathymetry raster was then cropped to the SST extent and resampled 
+to match its resolution using a nearest neighbor approach.
+
+```{r}
+# First convert depth stars to SpatRaster
+depth_rast <- rast(depth)
+# crop depth to match SST  extent
+depth_crop <- crop(depth_rast, sst_mean_celsius)
+
+# Resample depth_crop to match SST resolution, use method near
+depth_resample <- resample(depth_crop,
+                           sst_mean_celsius, 
+                           method = "near")
+```
+
+```{r}
+#| output: true
+
+#Check resolution match 
+if (all(dim(depth_resample) == dim(sst_mean_celsius)) &&
+    isTRUE(all.equal(res(depth_resample), res(sst_mean_celsius))) &&
+    crs(depth_resample) == crs(sst_mean_celsius) &&
+    ext(depth_resample) == ext(sst_mean_celsius)) {
+  cat("✓ All raster properties match!\n")
+} else {
+  cat("✗ Some properties do not match\n")
+}
+
+# Match depth and SST CRS's
+crs(depth_resample) <- crs(sst_mean_celsius)
+
+
+cat("✓ Successfully stacked!\n")
+```
+
+# Find suitable locations for Oysters
+
+To find suitable locations for marine aquaculture, we’ll need to find locations that are suitable in terms of both SST and depth. **Oyster** research has show that oysters need the following conditions for optimal growth: - Sea surface Reclassify SST and depth data into locations that are suitable for oysters hint: set suitable values to 1 and unsuitable values to 0 find locations that satisfy both SST and depth conditions
+
+```{r}
+# Reclassify SST (11-30°C suitable for oysters)
+sst_suitable <- app(sst_mean_celsius, fun = function(x){
+  ifelse(x >= 11 & x <= 30,1,0) # if temperate is between 11- 30 °C, return 1, else 0
+})
+
+# Reclassify Suitable depth range (0-70 meters for oysters)
+depth_suitable <- app(depth_resample, fun = function(x){
+  ifelse(x >= -70 & x <= 0,1,0) # select depths from 0 to 70 meters below surface.
+})
+
+# Suitable locations for both conditions
+#Use lapp() to multiply the two suitability raster
+
+suitable_locations <- lapp(c(sst_suitable, depth_suitable), 
+                          fun = function(sst, depth) {
+                             sst * depth
+                           })
+
+#suitable_locations <- sst_suitable * depth_suitable
+
+```
+
+# Determine the most suitable EEZ
+
+We want to determine the total suitable area within each EEZ in order to rank zones by priority. To do so, we need to find the total area of suitable locations within each EEZ.
+
+Select suitable cells within West Coast EEZ's find area of grid cells find the total suitable area within each EEZ hint: it might be helpful to rasterize the EEZ data
+
+```{r}
+# Rasterize the EEZ data (creates zone IDs)
+eez_raster <- rasterize(eez, suitable_locations, field = "rgn")
+
+# Mask suitable locations to EEZ boundaries
+
+# keep only raster cells that fall within the EEZ polygons
+suitable_eez <- mask(suitable_locations, eez) 
+
+#Calculate cell area with cellSize()
+
+# calculate actual area of each raster cell
+cell_area_km2 <- cellSize(suitable_locations, unit = "km") 
+
+# Calculate suitable area per cell
+suitable_area <- suitable_eez * cell_area_km2
+
+# Sum suitable are by EEZ zonal statistics 
+eez_suitable_area <- zonal(suitable_area, eez_raster, fun = "sum", na.rm = TRUE)
+colnames(eez_suitable_area) <- c("eez_id", "suitable_area_km2")
+```
+
+```{r}
+# join with eez data
+eez$suitable_area_km2 <- eez_suitable_area$suitable_area_km2[match
+                                                             (eez$rgn, 
+                                                               eez_suitable_area$eez_id)]
+
+# Rank EEZ data
+eez_ranked <- eez[order(-eez$suitable_area_km2), ]
+
+summary_table <- data.frame(
+  Rank = 1:nrow(eez_ranked),
+  EEZ_Name = eez_ranked$rgn_key,
+  Suitable_Area_km2 = round(eez_ranked$suitable_area_km2, 2),
+  Percent_of_Total = round(100 * eez_ranked$suitable_area_km2 / 
+                           sum(eez_ranked$suitable_area_km2), 1)
+)
+
+# Create a Table
+eez_table <- kable(summary_table,
+      caption = "EEZ Rankings by Suitable Aquaculture Area",
+      col.names = c("Rank", "EEZ Region", "Suitable Area (km²)", "% of Total"),
+      align = c("c", "l", "r", "r")) %>%
+  kable_styling(bootstrap_options = c("striped", "hold_position"),
+                full_width = FALSE) %>%
+  row_spec(0, bold = TRUE, background = "#4CAF50", color = "white") %>%
+  row_spec(1, bold = TRUE, background = "#E8F5E9")  # Highlight top rank
+
+eez_table
+```
+
+```{r, message=FALSE}
+#| fig.width: 10
+#| fig.height: 8
+
+# Map with tmap basic
+tm_basemap("Esri.OceanBasemap", alpha = 0.7) +
+tm_shape(eez_ranked) +
+  tm_polygons("suitable_area_km2",
+              palette = "-mako",
+               style = "cont",
+              title = "Suitable Area (km²)",
+              border.col = "black",
+              border.lwd = 0.5) +
+  tm_layout(main.title = "Suitable Oyster Aquaculuture Area by EEZ",
+            main.title.size = 1.2,
+            legend.outsides = TRUE,
+            frame = FALSE) + 
+    tm_text("rgn", # Label by region
+          size = .8, # Adjust size
+          col = "white", # Adjust text color
+          fontface = "bold", # Labels are bolded
+          xmod = -.5) + # Adjust .5 from the left
+  tm_compass(type = "4star", position = c("right", "top")) +
+  tm_scalebar(position = c("left", "bottom")) 
+  
+ 
+```
+
+# Workflow for other species using a function
+
+```{r}
+
+find_suitable_aquaculture <- function(sst_raster, 
+                                      depth_raster, 
+                                      eez_sf, 
+                                      sst_min, 
+                                      sst_max, 
+                                      depth_min, 
+                                      depth_max,
+                                      species_name) {
+  
+# Reclassify SST
+sst_suitable <- app(sst_raster, fun = function(x) {
+    ifelse(x >= sst_min & x <= sst_max, 1, 0)
+  })
+  
+# Reclassify depth
+depth_suitable <- app(depth_raster, fun = function(x) {
+    ifelse(x >= depth_min & x <= depth_max, 1, 0)
+  })
+  
+# Find suitable locations (both conditions)
+suitable_locations <- sst_suitable * depth_suitable
+names(suitable_locations) <- species_name 
+
+# Mask to EEZ
+suitable_in_eez <- mask(suitable_locations, eez_sf)
+  
+# Rasterize EEZ
+eez_rasterize <- rasterize(eez_sf, suitable_locations, field = "rgn")
+  
+# Calculate cell areas
+cell_area_km2 <- cellSize(suitable_locations, unit = "km")
+ 
+
+# Calculate suitable area per cell (commented out for now)
+suitable_area <- suitable_in_eez * cell_area_km2
+  
+
+# Sum by EEZ zone
+eez_suitable_area <- zonal(
+  suitable_area, 
+  eez_rasterize, 
+  fun = "sum", 
+  na.rm = TRUE)
+
+colnames(eez_suitable_area) <- c("EEZ_ID", "Suitable_Area_km2")
+  
+# Join with EEZ data and rank
+eez_sf$suitable_area_km2 <-
+  eez_suitable_area$Suitable_Area_km2[
+    match(eez_sf$rgn, eez_suitable_area$EEZ_ID)]
+  eez_ranked <- eez_sf[order(-eez_sf$suitable_area_km2), ]
+  
+# Create summary table
+summary_table <- data.frame(
+   Rank = 1:nrow(eez_ranked),
+    EEZ = eez_ranked$rgn_key,
+    Suitable_Area_km2 = round(eez_ranked$suitable_area_km2, 2)
+  )
+  
+# Return results as a list
+results <- list(
+   species = species_name,
+  sst_suitable = sst_suitable,
+   depth_suitable = depth_suitable,
+   suitable_locations = suitable_locations,
+   suitable_in_eez = suitable_in_eez,
+   eez_ranked = eez_ranked,
+    summary_table = summary_table
+  )
+  
+ return(results)
+}
+```
+
+# Apply function to species of choice
+
+## Ophiodon elongatus (Girard, 1854)
+
+- Common Name: Lingcod
+- High commercial and recreational value; key West Coast groundfish fishery
+  - Depth range: 0–100 meters (most individuals; max 475 m)
+  - Temperature: 7–18°C
+- Source: FishBase
+
+```{r}
+# Lingcod suitable habitat
+lingcod_results <- find_suitable_aquaculture(
+  sst_raster = sst_mean_celsius,
+  depth_raster = depth_resample,
+  eez_sf = eez,
+  sst_min = 7,
+  sst_max = 18,
+  depth_min = -100,
+  depth_max = 0,
+  species_name = "Lingcod"
+)
+# Access result as a table
+kable(lingcod_results$summary_table)
+```
+
+```{r, message=FALSE}
+#| out-width: 90%
+#| fig-width: 8  # This determines file resolution
+#| fig-height: 6 # This determines file resolution
+
+
+# Plot Mussel EEZ
+tm_basemap("Esri.OceanBasemap", alpha = 0.7) +
+#tm_shape(mussel_results$suitable_in_eez) +
+  tm_shape(lingcod_results$eez_ranked) +
+  tm_polygons("suitable_area_km2",
+              palette = "-mako",
+              style = "cont",
+              title = "Suitable Area (km²)",
+              border.col = "black",
+              border.lwd = 0.5) +
+  tm_layout(main.title = "Suitable Lingcod Aquaculture Area by EEZ",
+            main.title.size = 1.2,
+            legend.outside = TRUE,
+            frame = FALSE) +
+  tm_text("rgn", # Label by region
+          size = .7, # Adjust size
+          col = "white", # Adjust text color
+          fontface = "bold", # Labels are bolded
+          xmod = -.5) + # Adjust .5 from the left
+  tm_compass(type = "4star", 
+           position = c("right", "top"),
+           size = 2) +
+tm_scale_bar(position = c("left", "bottom"))
+```
+
+# Reflections
+
+This analysis identified suitable locations for oyster and Lingcod 
+aquaculture along the U.S. West Coast EEZs by integrating mean sea 
+surface temperature (SST, 2008–2012) and bathymetric data. Reclassifying 
+continuous rasters into binary suitability layers and combining them via 
+map algebra allowed environmental constraints to be evaluated jointly, 
+while zonal statistics quantified suitable area within each jurisdictional 
+boundary.
+
+For oysters (11–30°C, 0–70 m), Central California (CA-C) ranked highest 
+with 4,940 km² of suitable area, likely reflecting its warmer nearshore 
+SSTs and broad shallow shelf. Northern California (CA-N) ranked lowest 
+at 454 km², suggesting its cooler upwelling-influenced waters and 
+limited shelf area reduce suitability.
+
+Lingcod (7–18°C, 0–100 m) showed a strikingly different spatial pattern. 
+Washington ranked first with 10,569 km², followed by Oregon (8,318 km²) 
+and Central California (7,776 km²). This northward shift reflects 
+Lingcod's cold-water preference, the cooler SSTs of Washington and 
+Oregon that limit oyster suitability are well within Lingcod's optimal 
+range. The contrast between species highlights how species-specific 
+environmental tolerances drive fundamentally different regional 
+priorities for aquaculture development.
+
+Several limitations apply to both analyses. SST and depth alone cannot 
+capture substrate type, Lingcod strongly prefer rocky reef habitat, 
+which this analysis cannot resolve. Additionally, marine protected areas, 
+tribal waters, shipping lanes, and harmful algal bloom frequency are not 
+accounted for and would substantially refine site selection in practice. 
+Future analyses could incorporate substrate classification and 
+multi-criteria decision frameworks to better reflect real-world 
+aquaculture constraints.
+
+# Cite
+
+Hall, S. J., Delaporte, A., Phillips, M. J., Beveridge, M. & O’Keefe, M. Blue Frontiers: Managing the Environmental Costs of Aquaculture (The WorldFish Center, Penang, Malaysia, 2011).
+
+Gentry, R. R., Froehlich, H. E., Grimm, D., Kareiva, P., Parke, M., Rust, M., Gaines, S. D., & Halpern, B. S. Mapping the global potential for marine aquaculture. Nature Ecology & Evolution, 1, 1317-1324 (2017).︎
+
+GEBCO Compilation Group (2022) GEBCO_2022 Grid (doi:10.5285/e0f0bb80-ab44-2739-e053-6c86abc0289c)
+
+Commercially Important Species Occurring in United States (contiguous states). (2025). Sealifebase.ca. https://www.sealifebase.ca/country/CountryChecklist.php?c_code=840&vhabitat=commercial
+
+Palomares, M.L.D. and D. Pauly. Editors. (2026). FishBase. www.fishbase.org
+
+Oliver, R. (2025, November 25). Homework Assignment 4. Github.io. https://eds-223-geospatial.github.io/assignments/HW4.html
