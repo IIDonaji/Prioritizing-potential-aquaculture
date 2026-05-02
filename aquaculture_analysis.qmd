@@ -227,7 +227,7 @@ eez_table
 #| fig.height: 8
 
 # Map with tmap basic
-tm_basemap("Esri.OceanBasemap", alpha = 0.7) +
+tm_basemap("CartoDB.Positron", alpha = 0.7) +
 tm_shape(eez_ranked) +
   tm_polygons("suitable_area_km2",
               palette = "-mako",
@@ -237,7 +237,7 @@ tm_shape(eez_ranked) +
               border.lwd = 0.5) +
   tm_layout(main.title = "Suitable Oyster Aquaculuture Area by EEZ",
             main.title.size = 1.2,
-            legend.outsides = TRUE,
+            legend.outside = TRUE,
             frame = FALSE) + 
     tm_text("rgn", # Label by region
           size = .8, # Adjust size
@@ -361,7 +361,7 @@ kable(lingcod_results$summary_table)
 
 
 # Plot Mussel EEZ
-tm_basemap("Esri.OceanBasemap", alpha = 0.7) +
+tm_basemap("CartoDB.Positron", alpha = 0.7) +
 #tm_shape(mussel_results$suitable_in_eez) +
   tm_shape(lingcod_results$eez_ranked) +
   tm_polygons("suitable_area_km2",
